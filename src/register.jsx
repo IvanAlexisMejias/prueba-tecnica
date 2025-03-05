@@ -15,7 +15,7 @@ export default function Register() {
             // Redireccionar a login después de registro exitoso
             navigate('/');
         } catch (error) {
-            alert('Error en el registro');
+            alert('Error en el registro' + error);
         }
     };
 
