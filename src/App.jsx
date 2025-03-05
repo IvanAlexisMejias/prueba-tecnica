@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 import Register from './register';
 import Login from './login';
 import PropTypes from 'prop-types';
+import './App.css';
 
 
 

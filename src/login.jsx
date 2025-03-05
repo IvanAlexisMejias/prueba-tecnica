@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import './App.css';
+import './index.css';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -48,7 +50,7 @@ export default function Login() {
                         className="w-full p-2 mb-4 border rounded"
                         required
                     />
-                    <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+                    <button type="submit" className="w-full bg-blue-500 p-2 rounded hover:bg-blue-600 text-white cursor-pointer active:bg-blue-700">
                         Iniciar sesión
                     </button>
                 </form>
