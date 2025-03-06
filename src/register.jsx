@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import './index.css';
+//reutilizar importaciones del login
 
 export default function Register() {
     const [email, setEmail] = useState('');

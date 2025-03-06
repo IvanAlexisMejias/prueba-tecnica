@@ -1,31 +1,31 @@
-import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import TemperatureChart from './components/TemperatureChart';
+import { useState, useEffect } from 'react'; //importo los hooks
+import io from 'socket.io-client'; //cliente
+import TemperatureChart from './components/TemperatureChart'; //par mostar el grafico
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import Register from './register';
+import Register from './register'; 
 import Login from './login';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; //valida los props
 import './App.css';
 
 
-
+//aqui me conecto al backend
 const socket = io('http://localhost:3001');
 
-// Ruta protegida (solo accesible si hay un token válido)
+// Ruta protegida (solo si hay un token válido)
 const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem('token');
     return token ? children : <Navigate to="/" />;
 };
 
 function App() {
-    const [temperature, setTemperature] = useState(0);
-    const [threshold, ] = useState(30);
+    const [temperature, setTemperature] = useState(0);// Almacena temperatura recibida
+    const [threshold, ] = useState(30); //estado umbral (arreglar)
 
     useEffect(() => {
         socket.on('temperatureUpdate', (data) => {
             setTemperature(data.temperature);
         });
-        socket.on('coresUsage', (data)=> console.log(data));
+        socket.on('coresUsage', (data)=> console.log(data)); //funcionalidad incompleta ya descrita en el backend
     }, [threshold]);
 
     // Botón de Cerrar Sesión dentro del App
@@ -62,9 +62,6 @@ function App() {
                                 <LogoutButton />
                             </div>
                             <TemperatureChart temperature={temperature} />
-                            <p className="text-lg text-center mt-5">
-                                Temperatura actual: {temperature.toFixed(2)}°C
-                            </p>
                         </div>
                     </ProtectedRoute>
                 } />

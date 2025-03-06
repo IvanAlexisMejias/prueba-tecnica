@@ -1,21 +1,22 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react'; //manejar estados locales
+import axios from 'axios'; //cliente para el backend
 import { useNavigate, Link } from 'react-router-dom';
 import './App.css';
-import './index.css';
+import './index.css';//concto con estilos base y tailwind
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+    const navigate = useNavigate(); //hook redireccion rutas
 
+    // Función asincrona (importante uso del await) que maneja el envío del formulario de login
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:3001/login', { email, password });
             alert(response.data.message);
             if (response.data.success) {
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('token', response.data.token);// Guarda el token recibido en localStorage
                 navigate('/dashboard');
             }
         } catch (error) {

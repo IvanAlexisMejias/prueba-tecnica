@@ -1,24 +1,25 @@
 import {
-    Chart as ChartJS,
-    LineElement,
-    PointElement,
-    LinearScale,
-    CategoryScale,
-    Title,
-    Tooltip,
+    Chart as ChartJS,//principal para confi del grafico
+    LineElement, //lineas que unen el grafico
+    PointElement, //puntitos para las lineas (marcadores)
+    LinearScale, //y
+    CategoryScale, //x
+    Title, // titulo para el grafico
+    Tooltip,// combi con PointElement para mostrar informacion
     Legend,
     Filler, // Para gradientes
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { useState, useEffect } from 'react'; //hooks
+import io from 'socket.io-client'; //conexion en tiempo real
+import { jsPDF } from 'jspdf'; //pdf
+import autoTable from 'jspdf-autotable'; //hace tablas para pdf
 import PropTypes from 'prop-types';
 import '../App.css';
 import '../index.css';
+import annotationPlugin from 'chartjs-plugin-annotation';//indispensable para el umbral
 
-// Colores futuristas
+// Colores 
 const NEON_CYAN = 'rgba(0, 255, 255, 0.8)';
 const NEON_MAGENTA = 'rgba(255, 0, 255, 0.8)';
 const DARK_BLUE = '#0A1F3D';
@@ -27,6 +28,7 @@ const GRADIENT_END = 'rgba(0, 0, 0, 0)';
 
 const socket = io('http://localhost:3001');
 
+//registro modulos para chrat
 ChartJS.register(
     LineElement,
     PointElement,
@@ -35,11 +37,13 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Filler, // Registrar Filler para gradientes
+    Filler, 
+    annotationPlugin
 );
 
+//funcion escencial recibe props de temp inicial y umbral, para dps actualizarlos
 function TemperatureChart({ temperature: initialTemperature, threshold: initialThreshold }) {
-    const [chartData, setChartData] = useState({
+    const [chartData, setChartData] = useState({ //datos del grafico
         labels: [],
         datasets: [{
             label: 'Temperatura (°C)',
@@ -59,20 +63,20 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
             pointRadius: 5,
             pointHoverRadius: 8,
             fill: true,
-            tension: 0.4, // Líneas suaves y curvas
+            tension: 0.4, // Líneas estilizadas
         }],
     });
-    const [records, setRecords] = useState([]);
-    const [actTemperature, setActTemperature] = useState(initialTemperature || 0);
-    const [minutes, setMinutes] = useState(1);
-    const [alertColor, setAlertColor] = useState('green');
-    const [alertMessage, setAlertMessage] = useState('');
-    const [threshold, setThreshold] = useState(initialThreshold || 30);
+    const [records, setRecords] = useState([]); //registros historicos
+    const [actTemperature, setActTemperature] = useState(initialTemperature || 0);//temperatura actual
+    const [minutes, setMinutes] = useState(1); //minutos para el pdf(inicial)
+    const [alertColor, setAlertColor] = useState('green');//mensaje alerta(inicia en verde)
+    const [alertMessage, setAlertMessage] = useState(''); //texto alerta
+    const [threshold, setThreshold] = useState(initialThreshold || 30);//umbral predeterminaod
 
     useEffect(() => {
         socket.on('temperatureUpdate', ({ temperature, threshold }) => {
-            setThreshold(threshold || initialThreshold || 30);
-            setActTemperature(temperature || initialTemperature || 0);
+            setThreshold(threshold || initialThreshold || 30);//Importante (aca se actualiza el umbral si cambia)
+            setActTemperature(temperature || initialTemperature || 0);//aca la temperatura
 
             const time = new Date();
             const formattedTime = time.toLocaleTimeString();
@@ -81,12 +85,12 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
             setRecords((prev) => {
                 const lastRecord = prev[prev.length - 1];
                 if (lastRecord && lastRecord.time.toLocaleTimeString() === formattedTime && lastRecord.temperature === temperature) {
-                    return prev; // Skip if the data is the same as the last record
+                    return prev; // Evita registros duplicados
                 }
                 return [...prev, { time, temperature }];
             });
 
-            // Actualizar los datos del gráfico con etiquetas únicas
+            // Actualizar los datos del gráfico 
             setChartData((prevData) => {
                 const newData = { ...prevData };
                 
@@ -108,7 +112,7 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: false, // Ocultar leyenda para un look más limpio
+                            display: false, // Ocultar leyenda 
                         },
                         annotation: {
                             annotations: {
@@ -119,7 +123,7 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                                     yMax: threshold,
                                     borderColor: 'rgba(255, 0, 0)',
                                     borderWidth: 2,
-                                    //borderDash: [5, 5], // Línea punteada futurista
+                                    borderDash: [5, 5], // Línea punteada 
                                     label: {
                                         enabled: true,
                                         content: `Umbral: ${threshold}°C`,
@@ -142,7 +146,7 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                             tricks: {
                                 autoSkip: true,
                                 maxTicksLimit: 10,
-                                color: '#A0A0A0', // Texto gris claro para un look futurista
+                                color: '#A0A0A0', // Texto gris claro 
                                 font: {
                                     family: 'Arial, sans-serif',
                                     size: 12,
@@ -150,7 +154,7 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                                 },
                             },
                             grid: {
-                                color: 'rgba(160, 160, 160, 0.2)', // Líneas de cuadrícula sutiles
+                                color: 'rgba(160, 160, 160, 0.2)', // Líneas de cuadrícula
                                 borderColor: NEON_CYAN,
                             },
                         },
@@ -182,7 +186,7 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                         },
                     },
                     animation: {
-                        duration: 1000, // Animación suave al actualizar
+                        duration: 1000, // Animación al actualizar
                         easing: 'easeInOutCubic',
                     },
                 };
@@ -209,28 +213,35 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
         };
     }, [initialThreshold, initialTemperature]);
 
+    //para cambiar el umbral del cliente
     const handleThresholdChange = (e) => {
         const newThreshold = parseFloat(e.target.value);
         setThreshold(newThreshold);
-        socket.emit('setThreshold', newThreshold);
+        socket.emit('setThreshold', newThreshold); // Envía el umbral nuevo al backend
     };
 
+    //funcion para exportar pdf
     const downloadPDF = () => {
         if (records.length === 0) {
             alert("No hay datos para exportar.");
             return;
         }
-    
+        
+        //manejo del input de descarga de pdf (usuario)
         const now = new Date();
         const requestedMinutes = parseInt(minutes) || 1;
         const requestedTimeAgo = new Date(now.getTime() - requestedMinutes * 60000);
     
+        //filtra registros y los ordena por hora ASC
         let recentRecords = records.filter(record => record.time > requestedTimeAgo);
         recentRecords.sort((a, b) => a.time - b.time);
-    
+        
+        //IMPORTANTE: lista para registros duplicados + set para registro de tiempos usados
         const uniqueRecords = [];
         const seenTimestamps = new Set();
-    
+        
+
+        //eliminamos registros repetidos par que quede uno (cada 5 segundos)
         for (const record of recentRecords) {
             const time = record.time;
             const key = `${time.getHours()}:${time.getMinutes()}:${Math.floor(time.getSeconds() / 5) * 5}`;
@@ -239,7 +250,8 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                 uniqueRecords.push(record);
             }
         }
-    
+        
+        //si faltan datos para completar minutos rellena con nulos (sin datos)
         const expectedRecordsCount = requestedMinutes * (60 / 5);
         if (uniqueRecords.length < expectedRecordsCount) {
             alert("No hay suficientes datos para el rango solicitado. Completando con 'Sin datos'.");
@@ -251,21 +263,25 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                 });
             }
         }
-    
+        
+        //ordena del mas reciente al mas antiguo
         uniqueRecords.sort((a, b) => b.time - a.time);
     
+        //crea el pdf (personalizar colores)
         try {
             const doc = new jsPDF();
-            doc.setFillColor(0, 0, 0); // Fondo negro para un look futurista
+            doc.setFillColor(0, 0, 0); // Fondo negro 
             doc.rect(0, 0, doc.internal.pageSize.width, doc.internal.pageSize.height, 'F');
             doc.setTextColor(255, 255, 255); // Texto blanco
             doc.text(`Registros de Temperatura (últimos ${requestedMinutes} minutos)`, 14, 20);
     
+            //Prepara los datos para la tabla: hora y temperatura.
             const tableData = uniqueRecords.map(record => [
                 record.time.toLocaleTimeString(),
                 record.temperature === 'Sin datos' ? 'Sin datos' : `${record.temperature.toFixed(2)}°C`
             ]);
-    
+            
+            //Genera la tabla dentro del PDF usando autoTable
             autoTable(doc, {
                 head: [["Hora", "Temperatura"]],
                 body: tableData,
@@ -433,16 +449,17 @@ function TemperatureChart({ temperature: initialTemperature, threshold: initialT
                 background: `linear-gradient(135deg, ${DARK_BLUE}, #1A2F5A)`, 
                 boxShadow: '0 10px 20px rgba(0, 0, 0, 0.5), 0 0 20px ${NEON_CYAN}' 
             }}>
-                <Line 
+                <Line //renderiza grafico
                     id="temperature-chart" 
-                    data={chartData} 
-                    options={chartData.options} 
+                    data={chartData} //datos de temperatura, etiquetas (horas) y estilos del gráfico.
+                    options={chartData.options} //Aqui envio las configuraciones personalizadas
                 />
             </div>
         </div>  
     );
 }
 
+//validad prips tipo numero
 TemperatureChart.propTypes = {
     temperature: PropTypes.number,
     threshold: PropTypes.number,
