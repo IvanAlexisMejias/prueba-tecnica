@@ -1,69 +1,163 @@
-# Getting Started with Create React App
+🚀 Manual Frontend del Sistema de Monitoreo de Temperatura en Tiempo Real
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🏠 Descripción del Proyecto
 
-## Available Scripts
+Sistema que permite monitorear temperaturas en tiempo real, mostrando los datos en un gráfico dinámico mediante WebSocket. Incluye autenticación de usuarios con JWT, alertas visuales por umbral de temperatura, envío automático de correos y exportación de registros históricos en PDF.
 
-In the project directory, you can run:
+⚠️ Importante:
 
-### `npm start`
+Primero debes registrarte y luego iniciar sesión.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Llegarán correos al email con el que te registraste e iniciaste sesión si la temperatura supera el umbral.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Para el correcto funcionamiento del frontend, es necesario tener el backend corriendo desde https://github.com/IvanAlexisMejias/prueba-tecnica-backend.
 
-### `npm test`
+🛠️ Tecnologías Utilizadas
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Tecnología
 
-### `npm run build`
+Descripción
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+React
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Biblioteca para construir interfaces de usuario dinámicas.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Vite
 
-### `npm run eject`
+Empaquetador rápido para desarrollo frontend.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+TailwindCSS
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Framework de estilos utilitarios para diseño responsivo.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+axios
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Cliente HTTP para comunicación con el backend.
 
-## Learn More
+socket.io-client
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Comunicación en tiempo real mediante WebSockets.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Chart.js
 
-### Code Splitting
+Librería para gráficos interactivos.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+react-chartjs-2
 
-### Analyzing the Bundle Size
+Adaptador para usar Chart.js en componentes React.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+jspdf
 
-### Making a Progressive Web App
+Generación de archivos PDF.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+jspdf-autotable
 
-### Advanced Configuration
+Creación de tablas dentro de PDFs generados.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+react-router-dom
 
-### Deployment
+Gestión de rutas y navegación en React.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+PropTypes
+
+Validación de tipos de propiedades (props).
+
+🧩 Instalación del Frontend
+
+✅ Requisitos:
+
+Node.js v16 o superior.
+
+npm (gestor de paquetes).
+
+Visual Studio Code (opcional).
+
+🚀 Pasos:
+
+Clona el repositorio:
+
+git clone <URL_DEL_REPOSITORIO>
+
+Accede a la carpeta del frontend:
+
+cd frontend
+
+Instala las dependencias:
+
+npm install
+
+Inicia el servidor de desarrollo:
+
+npm run dev
+
+Abre en tu navegador:
+
+http://localhost:5173/
+
+📦 Dependencias del package.json
+
+Dependencias principales:
+
+"dependencies": {
+  "axios": "^1.6.2",
+  "chart.js": "^4.4.0",
+  "jspdf": "^2.5.1",
+  "jspdf-autotable": "^3.5.33",
+  "prop-types": "^15.8.1",
+  "react": "^18.2.0",
+  "react-chartjs-2": "^5.2.0",
+  "react-dom": "^18.2.0",
+  "react-router-dom": "^6.21.1",
+  "socket.io-client": "^4.7.5"
+}
+
+Dependencias de desarrollo:
+
+"devDependencies": {
+  "@vitejs/plugin-react": "^4.2.1",
+  "autoprefixer": "^10.4.16",
+  "postcss": "^8.4.32",
+  "tailwindcss": "^3.4.1",
+  "vite": "^4.4.11"
+}
+
+🔄 Flujo de Uso del Sistema
+
+1️⃣ Registro de usuario (email y contraseña).2️⃣ Inicio de sesión (generación de token JWT válido por 1 hora).3️⃣ Acceso al Dashboard protegido (visualización del gráfico).4️⃣ Recepción de alertas visuales cuando la temperatura supera el umbral.5️⃣ Envío automático de correos al email registrado.6️⃣ Exportación del historial de temperaturas en PDF.
+
+🔔 Nota: Los correos se enviarán al email con el que te registraste e iniciaste sesión.
+
+🖥️ Funcionalidades Principales
+
+Autenticación y autorización con tokens JWT.
+
+Visualización de temperaturas en tiempo real mediante WebSockets.
+
+Alertas automáticas por temperatura alta.
+
+Exportación de registros históricos en PDF.
+
+Envío de correos electrónicos de alerta.
+
+Interfaz responsiva con TailwindCSS.
+
+Control de sesiones con token válido por 1 hora.
+
+📧 Advertencias y Recomendaciones
+
+El token expira tras 1 hora; al expirar, es necesario iniciar sesión nuevamente.
+
+Si el backend no está activo, no se reciben actualizaciones.
+
+Solo recibirás correos si el backend está funcionando correctamente.
+
+Asegúrate de que el backend esté disponible en http://localhost:3001/.
+
+📞 Soporte y Contacto
+
+📧 Email: ivan.mejiasm@gmail.com🔗 Repositorio: https://github.com/IvanAlexisMejias/prueba-tecnica
+
+🔗 Repositorio: https://github.com/IvanAlexisMejias/prueba-tecnica-backend
 
 ### `npm run build` fails to minify
 
