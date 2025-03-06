@@ -158,7 +158,3 @@ Asegúrate de que el backend esté disponible en http://localhost:3001/.
 📧 Email: ivan.mejiasm@gmail.com🔗 Repositorio: https://github.com/IvanAlexisMejias/prueba-tecnica
 
 🔗 Repositorio: https://github.com/IvanAlexisMejias/prueba-tecnica-backend
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
